@@ -1,27 +1,18 @@
 import os
 import json
 from crewai import LLM
-from dotenv import load_dotenv, find_dotenv
+from dotenv import load_dotenv
 
 # Load environment variables from .env file
-dotenv_path = find_dotenv()
 load_dotenv()
 
-# google
-file_path = 'gen-lang-client-0184211067-8d635d347db2.json'
+# Load credentials from environment variable
+vertex_credentials_json = os.getenv("VERTEX_CREDENTIALS")
+if not vertex_credentials_json:
+    raise ValueError("VERTEX_CREDENTIALS environment variable not set")
 
-# Load the JSON file
-with open(file_path, 'r') as file:
-    vertex_credentials = json.load(file)
-
-# gemini model
-vertex_credentials_json = json.dumps(vertex_credentials)
-
-
-# define class for LLM
-
+# Define class for LLM
 class google_model:
-
     def gemini_2_flash():
         return LLM(
             model="gemini/gemini-2.0-flash",
@@ -42,21 +33,21 @@ class google_model:
             temperature=0.7,
             vertex_credentials=vertex_credentials_json
         )
-class local_model():
-    
+
+class local_model:
     def mistral():
         return LLM(
-                model="ollama/mistral:latest",
-                base_url="http://localhost:11434",
-                temperature=0.7,
-            )
+            model="ollama/mistral:latest",
+            base_url="http://localhost:11434",
+            temperature=0.7,
+        )
         
     def gemma():
         return LLM(
-                model="ollama/gemma3:latest",
-                base_url="http://localhost:11434",
-                temperature=0.7,
-            )
+            model="ollama/gemma3:latest",
+            base_url="http://localhost:11434",
+            temperature=0.7,
+        )
         
     def ollama():
         return LLM(
@@ -67,7 +58,7 @@ class local_model():
     
     def cogito():
         return LLM(
-                model="ollama/cogito:latest",
-                base_url="http://localhost:11434",
-                temperature=0.7,
-            )
+            model="ollama/cogito:latest",
+            base_url="http://localhost:11434",
+            temperature=0.7,
+        )
